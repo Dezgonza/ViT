@@ -1,0 +1,22 @@
+import torch
+from torch import nn
+
+class Atention(nn.Module):
+    def __init__(self, dim, num_heads, dim_heads):
+        super().__init__()
+
+        self.num_head = num_heads
+        self.dim_heads = dim_heads
+        self.D_h = num_heads * dim_heads
+
+        self.split_to_qkv = nn.Linear(dim, 3 * self.D_h, bias = False)
+        self.fc = nn.Linear(self.D_h, dim)
+        self.softmax = nn.Softmax(dim = -1)
+        
+    def forward(self, img):
+        qkv = self.split_to_qkv(img)
+
+        attention = torch.matmul(q, k) * (self.dim_heads ** -0.5)
+        attention = self.softmax(attention)
+        attention = torch.matmul(attention, v)
+        attention = self.fc(attention)
