@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-class Atention(nn.Module):
+class Attention(nn.Module):
     def __init__(self, dim, num_heads, dim_heads, dropout):
         super().__init__()
 
