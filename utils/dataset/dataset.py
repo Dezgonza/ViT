@@ -1,10 +1,12 @@
 import numpy as np
 from PIL import Image
 import torch, logging
+from os import listdir
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
     def __init__(self, imgs_dir, scale=1):
+        super().__init__()
 
         self.imgs_dir = imgs_dir
         self.scale = scale
@@ -38,10 +40,12 @@ class YogaDataset(Dataset):
     @classmethod
     def do_transpose(cls, img_nd):
         img_trans = img_nd.transpose((2, 0, 1))
+        
         return img_trans
 
     def __getitem__(self, i):
         name = self.ids[i]
+        label = self.label[i]
         img_file = list(self.imgs_dir.glob(name + '.*')) 
 
         assert len(img_file) == 1, \
@@ -52,5 +56,5 @@ class YogaDataset(Dataset):
 
         return {
             'image': torch.from_numpy(img).type(torch.FloatTensor),
-            'class': 'holi'
+            'class': label
         }

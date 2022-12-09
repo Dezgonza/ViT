@@ -17,6 +17,7 @@ class EncoderLayer(nn.Module):
         x += self.dropout(x)
         out = self.linear(self.norm2(x))
         out += self.dropout(out)
+
         return out
 
 class Encoder(nn.Module):
@@ -29,4 +30,5 @@ class Encoder(nn.Module):
     def forward(self, x):
         for layer in self.layers:
             x = layer(x)
+            
         return x
