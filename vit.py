@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from utils.encoder import Encoder
+from utils.model.encoder import Encoder
 
 class ViT(nn.Module):
     def __init__(self, dim, num_heads, dim_heads, num_patches, n_classes):
