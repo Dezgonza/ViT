@@ -13,11 +13,10 @@ class EncoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, img):
-        x = self.att(img)
+        x = self.att(self.norm1(img))
         x += self.dropout(x)
-        x = self.linear(self.norm1(x))
-        x += self.dropout(x)
-        out = self.norm2(x)
+        out = self.linear(self.norm2(x))
+        out += self.dropout(out)
         return out
 
 class Encoder(nn.Module):
