@@ -1,6 +1,6 @@
 from torch import nn
-from linear import LinearNet
-from attention import Attention
+from .linear import LinearNet
+from .attention import Attention
 
 class EncoderLayer(nn.Module):
     def __init__(self, depth, dim, num_heads, dim_heads, dim_linear, dropout):
