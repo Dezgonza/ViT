@@ -1,18 +1,15 @@
 import numpy as np
 from PIL import Image
 import torch, logging
-from os import listdir
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
-    def __init__(self, imgs_dir, dtype='train', scale=1):
+    def __init__(self, imgs_dir, dtype='train', size=16*3):
         super().__init__()
 
+        self.size = size
         self.imgs_dir = imgs_dir
-        self.scale = scale
-        assert 0 < scale <= 1, 'Scale must be between 0 and 1'
-
-        with open(imgs_dir + '/yoga_' + dtype + '.txt', 'r') as f:
+        with open(imgs_dir + 'yoga_' + dtype + '_2.txt', 'r') as f:
             self.cls = f.readlines()
         f.close()
         logging.info(f'Creating dataset with {len(self.cls)} examples')
@@ -21,13 +18,11 @@ class YogaDataset(Dataset):
         return len(self.cls)
 
     @classmethod
-    def preprocess(cls, pil_img, scale):
-        w, h = pil_img.size
-        newW, newH = int(scale * w), int(scale * h)
-        assert newW > 0 and newH > 0, 'Scale is too small'
-        pil_img = pil_img.resize((newW, newH))
-
+    def preprocess(cls, pil_img, size):
+        assert size > 0, 'Scale is too small'
+        pil_img = pil_img.resize((size, size))
         img_nd = np.array(pil_img)
+        plt.imshow(img_nd)
 
         if len(img_nd.shape) == 2:
             img_nd = np.expand_dims(img_nd, axis=2)
@@ -46,17 +41,12 @@ class YogaDataset(Dataset):
         return img_trans
 
     def __getitem__(self, i):
-        name = self.ids[i]
-        label = self.label[i]
-        img_file = list(self.imgs_dir.glob(name + '.*')) 
-
-        assert len(img_file) == 1, \
-            f'Either no image or multiple images found for the ID {name}: {img_file}'
- 
-        img = Image.open(img_file[0])
-        img = self.preprocess(img, self.scale)
+        name, cls1, cls2, cls3 = self.cls[i].replace('\n', '').split(',')
+        img_file = self.imgs_dir + name
+        img = Image.open(img_file)
+        img = self.preprocess(img, self.size)
 
         return {
             'image': torch.from_numpy(img).type(torch.FloatTensor),
-            'class': label
+            'class': cls1
         }
