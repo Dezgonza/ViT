@@ -5,14 +5,16 @@ from os import listdir
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
-    def __init__(self, imgs_dir, scale=1):
+    def __init__(self, imgs_dir, dtype='train', scale=1):
         super().__init__()
 
         self.imgs_dir = imgs_dir
         self.scale = scale
         assert 0 < scale <= 1, 'Scale must be between 0 and 1'
 
-        self.cls = None
+        with open(imgs_dir + '/yoga_' + dtype + '.txt', 'r') as f:
+            self.cls = f.readlines()
+        f.close()
         logging.info(f'Creating dataset with {len(self.cls)} examples')
 
     def __len__(self):
