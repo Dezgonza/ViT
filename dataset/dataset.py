@@ -23,7 +23,6 @@ class YogaDataset(Dataset):
         assert size > 0, 'Scale is too small'
         pil_img = pil_img.resize((size, size))
         img_nd = np.array(pil_img)
-        plt.imshow(img_nd)
 
         if len(img_nd.shape) == 2:
             img_nd = np.expand_dims(img_nd, axis=2)
@@ -46,4 +45,3 @@ class YogaDataset(Dataset):
             'image': torch.from_numpy(img).type(torch.FloatTensor),
             'class': cls
         }
-        
