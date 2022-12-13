@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from einops import repeat
-from utils.model.encoder import Encoder
+from .utils.model.encoder import Encoder
 from einops.layers.torch import Rearrange
 
 class ViT(nn.Module):
