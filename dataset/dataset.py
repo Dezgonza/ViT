@@ -4,10 +4,11 @@ import torch, logging
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
-    def __init__(self, imgs_dir, dtype='train', size=16*3):
+    def __init__(self, imgs_dir, ltype=3, dtype='train', size=16*3):
         super().__init__()
 
         self.size = size
+        self.ltype = ltype
         self.imgs_dir = imgs_dir
         with open(imgs_dir + 'yoga_' + dtype + '_2.txt', 'r') as f:
             self.cls = f.readlines()
@@ -34,19 +35,15 @@ class YogaDataset(Dataset):
 
         return img_trans
 
-    @classmethod
-    def do_transpose(cls, img_nd):
-        img_trans = img_nd.transpose((2, 0, 1))
-        
-        return img_trans
-
     def __getitem__(self, i):
-        name, cls1, cls2, cls3 = self.cls[i].replace('\n', '').split(',')
+        data = self.cls[i].replace('\n', '').split(',')
+        name, cls = data[0], data[self.ltype]
         img_file = self.imgs_dir + name
         img = Image.open(img_file)
         img = self.preprocess(img, self.size)
 
         return {
             'image': torch.from_numpy(img).type(torch.FloatTensor),
-            'class': cls1
+            'class': cls
         }
+        
