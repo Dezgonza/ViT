@@ -3,7 +3,7 @@ from .linear import LinearNet
 from .attention import Attention
 
 class EncoderLayer(nn.Module):
-    def __init__(self, depth, dim, num_heads, dim_heads, dim_linear, dropout):
+    def __init__(self, dim, num_heads, dim_heads, dim_linear, dropout):
         super().__init__()
 
         self.att = Attention(dim, num_heads, dim_heads, dropout)
