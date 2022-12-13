@@ -13,13 +13,15 @@ class ViT(nn.Module):
         patch_dim = channels * patch_size[0] * patch_size[1]
 
         self.to_patch_embedding = nn.Sequential(
-            Rearrange('b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1 = patch_size[0], p2 = patch_size[1]),
+            Rearrange('b c (h p1) (w p2) -> b (h w) (p1 p2 c)',
+                      p1 = patch_size[0], p2 = patch_size[1]),
             nn.Linear(patch_dim, dim),
         )
         self.cls_token = nn.Parameter(torch.randn(1, 1, dim))
         self.dropout = nn.Dropout(dropout)
         self.pos_emb = nn.Parameter(torch.rand(1, n_patches + 1, dim))
-        self.encoder = Encoder(n_layer, dim, num_heads, dim_heads)
+        self.encoder = Encoder(n_layer, dim=dim, num_heads=num_heads,
+                               dim_heads=dim_heads, dim_linear=2*dim, dropout=dropout)
         self.to_latent = nn.Identity()
         self.fc_out = nn.Linear(dim, n_classes)
         self.norm = nn.LayerNorm(dim)
