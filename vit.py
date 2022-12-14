@@ -9,6 +9,7 @@ class ViT(nn.Module):
                  dim_heads, dropout, channels = 3):
         super().__init__()
 
+        self.n_classes = n_classes
         n_patches = (image_size[0] // patch_size[0]) * (image_size[1] // patch_size[1])
         patch_dim = channels * patch_size[0] * patch_size[1]
 

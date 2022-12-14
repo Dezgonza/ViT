@@ -38,7 +38,7 @@ class YogaDataset(Dataset):
         data = self.cls[i].replace('\n', '').split(',')
         name, cls = data[0], int(data[self.ltype])
         img_file = self.imgs_dir + name
-        img = Image.open(img_file)
+        img = Image.open(img_file).convert('RGB')
         np_img = self.preprocess(img, self.size)
         img.close()
 
