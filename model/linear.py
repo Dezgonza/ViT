@@ -4,7 +4,6 @@ import torch.nn.functional as F
 class LinearNet(nn.Module):
     def __init__(self, init_dim, inner_dim, dropout):
         super().__init__()
-        self.gelu = nn.GeLU()
         self.fn_init = nn.Linear(init_dim, inner_dim)
         self.fn_out = nn.Linear(inner_dim, inner_dim)
         self.drop = nn.Dropout(dropout)
