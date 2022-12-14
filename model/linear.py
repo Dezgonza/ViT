@@ -1,4 +1,5 @@
 from torch import nn
+import torch.nn.functional as F
 
 class LinearNet(nn.Module):
     def __init__(self, init_dim, inner_dim, dropout):
@@ -9,7 +10,7 @@ class LinearNet(nn.Module):
         self.drop = nn.Dropout(dropout)
 
     def forward(self, x):
-        out = self.drop(self.gelu(self.fn_init(x)))
+        out = self.drop(F.gelu(self.fn_init(x)))
         out = self.drop(self.fn_out(x))
         
         return out
