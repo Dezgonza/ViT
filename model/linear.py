@@ -8,7 +8,7 @@ class LinearNet(nn.Module):
         self.drop = nn.Dropout(dropout)
 
     def forward(self, x):
-        out = self.drop(nn.GeLU(self.fn_init(x)))
+        out = self.drop(nn.ReLU(self.fn_init(x)))
         out = self.drop(self.fn_out(x))
         
         return out
