@@ -10,6 +10,6 @@ class LinearNet(nn.Module):
 
     def forward(self, x):
         out = self.drop(F.gelu(self.fn_init(x)))
-        out = self.drop(self.fn_out(x))
+        out = self.drop(self.fn_out(out))
         
         return out
