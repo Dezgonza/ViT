@@ -36,7 +36,7 @@ class YogaDataset(Dataset):
 
     def __getitem__(self, i):
         data = self.cls[i].replace('\n', '').split(',')
-        name, cls = data[0], data[self.ltype]
+        name, cls = data[0], int(data[self.ltype])
         img_file = self.imgs_dir + name
         img = Image.open(img_file)
         np_img = self.preprocess(img, self.size)
