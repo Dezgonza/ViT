@@ -39,9 +39,10 @@ class YogaDataset(Dataset):
         name, cls = data[0], data[self.ltype]
         img_file = self.imgs_dir + name
         img = Image.open(img_file)
-        img = self.preprocess(img, self.size)
+        np_img = self.preprocess(img, self.size)
+        img.close()
 
         return {
-            'image': torch.from_numpy(img).type(torch.FloatTensor),
+            'image': torch.from_numpy(np_img).type(torch.FloatTensor),
             'class': cls
         }
