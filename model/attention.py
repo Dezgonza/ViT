@@ -26,6 +26,7 @@ class Attention(nn.Module):
         attention *= math.sqrt(self.dim_heads)
         attention = self.softmax(attention)
         attention = torch.matmul(attention, v)
+        attention = rearrange(attention, 'b h n d -> b n (h d)')
         attention = self.fc(attention)
         attention = self.drop(attention)
 
