@@ -5,7 +5,7 @@ class Attention(nn.Module):
     def __init__(self, dim, num_heads, dim_heads, dropout):
         super().__init__()
 
-        self.num_head = num_heads
+        self.num_heads = num_heads
         self.dim_heads = dim_heads
         self.D_h = num_heads * dim_heads
 

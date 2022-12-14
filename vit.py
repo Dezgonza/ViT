@@ -30,7 +30,7 @@ class ViT(nn.Module):
         x = self.to_patch_embedding(img)
         b, n, _ = x.shape
         cls_tokens = repeat(self.cls_token, '1 1 d -> b 1 d', b = b)
-        x = torch.cat([cls_tokens, img], dim = 1)
+        x = torch.cat([cls_tokens, x], dim = 1)
         x += self.pos_emb[:, : (n + 1)]
         x = self.dropout(x)
         x = self.encoder(x)[:, 0]
