@@ -1,4 +1,4 @@
-import torch
+import torch, math
 from torch import nn
 
 class Attention(nn.Module):
@@ -21,7 +21,7 @@ class Attention(nn.Module):
         q, k, v = qkv.chunk(3, dim=-1)
 
         attention = torch.matmul(q, k.transpose(-1, -2))
-        attention *= torch.sqrt(self.dim_heads)
+        attention *= math.sqrt(self.dim_heads)
         attention = self.softmax(attention)
         attention = torch.matmul(attention, v)
         attention = self.fc(attention)
