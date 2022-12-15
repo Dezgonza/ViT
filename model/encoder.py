@@ -23,7 +23,7 @@ class EncoderLayer(nn.Module):
 class Encoder(nn.Module):
     def __init__(self, n_layers, **layer_args):
         super().__init__()
-
+        
         self.layers = nn.ModuleList([EncoderLayer(**layer_args) \
                                      for _ in range(n_layers)])
                                     

@@ -20,12 +20,9 @@ class YogaDataset(Dataset):
 
     @classmethod
     def preprocess(cls, pil_img, size):
-        assert size > 0, 'Scale is too small'
+        assert size > 0, 'Size is too small'
         pil_img = pil_img.resize((size, size))
         img_nd = np.array(pil_img)
-
-        if len(img_nd.shape) == 2:
-            img_nd = np.expand_dims(img_nd, axis=2)
 
         # HWC to CHW
         img_trans = img_nd.transpose((2, 0, 1))
@@ -37,8 +34,7 @@ class YogaDataset(Dataset):
     def __getitem__(self, i):
         data = self.cls[i].replace('\n', '').split(',')
         name, cls = data[0], int(data[self.ltype])
-        img_file = self.imgs_dir + name
-        img = Image.open(img_file).convert('RGB')
+        img = Image.open(self.imgs_dir + name).convert('RGB')
         np_img = self.preprocess(img, self.size)
         img.close()
 
