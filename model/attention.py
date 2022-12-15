@@ -23,7 +23,7 @@ class Attention(nn.Module):
         #q, k, v = qkv.chunk(3, dim=-1)
 
         attention = torch.matmul(q, k.transpose(-1, -2))
-        attention *= math.sqrt(self.dim_heads)
+        attention /= math.sqrt(self.dim_heads)
         attention = self.softmax(attention)
         attention = torch.matmul(attention, v)
         attention = rearrange(attention, 'b h n d -> b n (h d)')
