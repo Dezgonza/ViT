@@ -22,12 +22,12 @@ class Attention(nn.Module):
         #qkv = qkv.permute(0, 2, 1, 3) # [Batch, Head, SeqLen, Dims]
         #q, k, v = qkv.chunk(3, dim=-1)
 
-        attention = torch.matmul(q, k.transpose(-1, -2))
-        attention /= math.sqrt(self.dim_heads)
-        attention = self.softmax(attention)
-        attention = torch.matmul(attention, v)
-        attention = rearrange(attention, 'b h n d -> b n (h d)')
-        attention = self.fc(attention)
-        attention = self.drop(attention)
+        qk = torch.matmul(q, k.transpose(-1, -2))
+        qk /= math.sqrt(self.dim_heads)
+        att = self.drop(self.softmax(qk))
+        att = torch.matmul(att, v)
+        att = rearrange(att, 'b h n d -> b n (h d)')
+        att = self.fc(att)
+        out = self.drop(att)
 
-        return attention
+        return out
