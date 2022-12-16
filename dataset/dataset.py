@@ -26,7 +26,4 @@ class YogaDataset(Dataset):
         t_img = self.transform(img)
         img.close()
 
-        return {
-            'image': t_img,
-            'class': cls
-        }
+        return t_img, cls
