@@ -5,8 +5,8 @@ from model.encoder import Encoder
 from einops.layers.torch import Rearrange
 
 class ViT(nn.Module):
-    def __init__(self, image_size, patch_size, n_layer, n_classes, dim, num_heads,
-                 dim_heads, dim_linear, dropout, channels = 3):
+    def __init__(self, image_size, patch_size, n_classes, n_layer, dim, num_heads,
+                 linear_dim, dim_head=64, channels=3, dropout=0.):
         super().__init__()
 
         self.n_classes = n_classes
@@ -22,10 +22,10 @@ class ViT(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.pos_emb = nn.Parameter(torch.rand(1, n_patches + 1, dim))
         self.encoder = Encoder(n_layer, dim=dim, num_heads=num_heads,
-                               dim_heads=dim_heads, dim_linear=dim_linear, dropout=dropout)
+                               dim_head=dim_head, linear_dim=linear_dim, dropout=dropout)
         self.to_latent = nn.Identity()
-        self.fc_out = nn.Linear(dim, n_classes)
         self.norm = nn.LayerNorm(dim)
+        self.fc_out = nn.Linear(dim, n_classes)
 
     def forward(self, img):
         x = self.to_patch_embedding(img)

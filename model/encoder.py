@@ -3,20 +3,19 @@ from .linear import LinearNet
 from .attention import Attention
 
 class EncoderLayer(nn.Module):
-    def __init__(self, dim, num_heads, dim_heads, dim_linear, dropout):
+    def __init__(self, dim, num_heads, linear_dim, dim_head=64, dropout=0.):
         super().__init__()
 
-        self.att = Attention(dim, num_heads, dim_heads, dropout)
-        self.linear = LinearNet(dim, dim_linear, dropout)
+        self.att = Attention(dim, num_heads, dim_head, dropout)
+        self.linear = LinearNet(dim, linear_dim, dropout)
         self.norm1 = nn.LayerNorm(dim)
         self.norm2 = nn.LayerNorm(dim)
-        self.dropout = nn.Dropout(dropout)
 
     def forward(self, img):
         att_out = self.att(self.norm1(img))
-        x = self.dropout(att_out) + img
+        x = att_out + img
         mlp_out = self.linear(self.norm2(x))
-        out = self.dropout(mlp_out) + x
+        out = mlp_out + x
 
         return out
 
