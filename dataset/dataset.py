@@ -4,12 +4,13 @@ import torch, logging
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
-    def __init__(self, imgs_dir, ltype=3, dtype='train', size=16*3):
+    def __init__(self, imgs_dir, transform=None, ltype=3, dtype='train', size=16*3):
         super().__init__()
 
         self.size = size
         self.ltype = ltype
         self.imgs_dir = imgs_dir
+        self.transform = transform
         with open(imgs_dir + 'yoga_' + dtype + '_2.txt', 'r') as f:
             self.cls = f.readlines()
         f.close()
@@ -18,27 +19,14 @@ class YogaDataset(Dataset):
     def __len__(self):
         return len(self.cls)
 
-    @classmethod
-    def preprocess(cls, pil_img, size):
-        assert size > 0, 'Size is too small'
-        pil_img = pil_img.resize((size, size))
-        img_nd = np.array(pil_img)
-
-        # HWC to CHW
-        img_trans = img_nd.transpose((2, 0, 1))
-        if img_trans.max() > 1:
-            img_trans = img_trans / 255
-
-        return img_trans
-
     def __getitem__(self, i):
         data = self.cls[i].replace('\n', '').split(',')
         name, cls = data[0], int(data[self.ltype])
         img = Image.open(self.imgs_dir + name).convert('RGB')
-        np_img = self.preprocess(img, self.size)
+        t_img = self.transform(img)
         img.close()
 
         return {
-            'image': torch.from_numpy(np_img).type(torch.FloatTensor),
+            'image': t_img,
             'class': cls
         }
