@@ -25,7 +25,7 @@ class YogaDataset(Dataset):
         img = Image.open(self.imgs_dir + name)
         img = img.convert('RGBA' if img.info.get("transparency", False) else 'RGB')
         img = Image.fromarray(np.array(img)[:,:,:3])
-        t_img = self.transform(img, 'RGB')
+        t_img = self.transform(img)
         img.close()
 
         return t_img, cls
