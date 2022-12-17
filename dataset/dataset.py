@@ -22,9 +22,10 @@ class YogaDataset(Dataset):
     def __getitem__(self, i):
         data = self.cls[i].replace('\n', '').split(',')
         name, cls = data[0], int(data[self.ltype])
-        img = Image.open(self.imgs_dir + name).convert('RGB')
-        #img = img.convert('RGBA' if img.info.get("transparency", False) else 'RGB')
-        t_img = self.transform(img)
+        img = Image.open(self.imgs_dir + name)
+        img = img.convert('RGBA' if img.info.get("transparency", False) else 'RGB')
+        img = Image.fromarray(np.array(img)[:,:,:3])
+        t_img = self.transform(img, 'RGB')
         img.close()
 
         return t_img, cls
