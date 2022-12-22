@@ -4,10 +4,9 @@ import torch, logging
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
-    def __init__(self, imgs_dir, transform=None, ltype=3, dtype='train', size=16*3):
+    def __init__(self, imgs_dir, transform=None, ltype=3, dtype='train'):
         super().__init__()
 
-        self.size = size
         self.ltype = ltype
         self.imgs_dir = imgs_dir
         self.transform = transform
