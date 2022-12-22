@@ -19,10 +19,6 @@ class Attention(nn.Module):
     def forward(self, img):
         qkv = self.split_to_qkv(img).chunk(3, dim = -1)
         q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h = self.num_heads), qkv)
-        #qkv = qkv.reshape(img.size()[0], img.size()[1], self.num_heads, 3 * self.dim_heads)
-        #qkv = qkv.permute(0, 2, 1, 3) # [Batch, Head, SeqLen, Dims]
-        #q, k, v = qkv.chunk(3, dim=-1)
-
         qk = torch.matmul(q, k.transpose(-1, -2))
         qk /= math.sqrt(self.dim_head)
         att = self.drop1(self.softmax(qk))

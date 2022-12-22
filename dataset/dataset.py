@@ -1,6 +1,6 @@
+import logging
 import numpy as np
 from PIL import Image
-import torch, logging
 from torch.utils.data import Dataset
 
 class YogaDataset(Dataset):
